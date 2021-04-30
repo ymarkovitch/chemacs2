@@ -140,7 +140,6 @@
     (load early-init-file t t)))
 
 (defun chemacs-load-user-init ()
-  (when (chemacs-profile-get 'straight-p) (chemacs-load-straight))
   (let ((init-file (expand-file-name "init.el" user-emacs-directory)))
     (load init-file t t)
     ;; Prevent customize from changing ~/.emacs (this file), but if
@@ -152,18 +151,5 @@
           (unless (file-exists-p custom-file)
             (with-temp-buffer (write-file custom-file)))
           (load custom-file))))))
-
-(defun chemacs-load-straight ()
-  (defvar bootstrap-version)
-  (let ((bootstrap-file (expand-file-name "straight/repos/straight.el/bootstrap.el" user-emacs-directory))
-        (bootstrap-version 5))
-    (unless (file-exists-p bootstrap-file)
-      (with-current-buffer
-          (url-retrieve-synchronously
-           "https://raw.githubusercontent.com/raxod502/straight.el/develop/install.el"
-           'silent 'inhibit-cookies)
-        (goto-char (point-max))
-        (eval-print-last-sexp)))
-    (load bootstrap-file nil 'nomessage)))
 
 (provide 'chemacs)
